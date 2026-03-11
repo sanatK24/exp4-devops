@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = "DemoApp"
+        BUILD_ENV = "Development"
     }
 
     options {
@@ -11,9 +12,16 @@ pipeline {
 
     stages {
 
+        stage('Initialize') {
+            steps {
+                echo "Starting pipeline for ${APP_NAME}"
+                echo "Environment: ${BUILD_ENV}"
+            }
+        }
+
         stage('Build') {
             steps {
-                echo "Building ${APP_NAME}..."
+                echo "Building application..."
                 sh 'echo Compiling source code'
                 sh 'java -version'
             }
@@ -29,35 +37,34 @@ pipeline {
         stage('Package') {
             steps {
                 echo "Packaging application..."
-                sh 'echo Creating build artifact'
+                sh 'echo Creating application artifact'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying ${APP_NAME}..."
-                sh 'echo Deployment to test environment'
+                echo "Deploying application..."
+                sh 'echo Deploying to staging server'
             }
         }
 
         stage('Monitor') {
             steps {
-                echo "Monitoring application..."
-                sh 'echo Checking application health'
+                echo "Monitoring deployment..."
+                sh 'echo Checking application status'
             }
         }
-
     }
 
     post {
         success {
-            echo "Pipeline executed successfully"
+            echo "Pipeline completed successfully"
         }
         failure {
-            echo "Pipeline failed"
+            echo "Pipeline execution failed"
         }
         always {
-            echo "Pipeline execution finished"
+            echo "Pipeline finished"
         }
     }
 }
